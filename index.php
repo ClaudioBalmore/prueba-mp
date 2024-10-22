@@ -6,6 +6,18 @@ use MercadoPago\MercadoPagoConfig;
 require 'vendor/autoload.php';
 
 $resend = Resend::client('re_Qc72Wbin_CFgyECUTvXbPLw4NPXfSaVwF');
+// //Formatear fecha
+// $fechaOriginal = $payment->date_approved;
+// $fecha = new DateTime($fechaOriginal);
+
+// $correo = ' Compra realizada con éxito <br>
+// Número de Transacción: '.$payment->id.'<br>
+// Fecha Aprovación: '. $fecha->format('d/m/Y H:i:s') .'
+
+
+
+// ';
+
 
 MercadoPagoConfig::setAccessToken("APP_USR-7814564292133896-100119-aa29a73b031435648377a718733848d2-2016921642");
 
@@ -25,13 +37,17 @@ if (isset($datos['type']) && $datos['type'] == 'payment') {
         fwrite($file, "NOTIFICACIÓN: " . json_encode($datos, JSON_PRETTY_PRINT) . PHP_EOL);
         fwrite($file, "PAGO: " . json_encode($payment, JSON_PRETTY_PRINT) . PHP_EOL);
         fclose($file);
+        
 
-        $result = $resend->emails->send([
-            'from' => 'Contacto <onboarding@resend.dev>',
-            'to' => ['cnunezcerda@gmail.com'],
-            'subject' => 'Notificación de Compra',
-            'html' => 'El id del comprador es: ' . $payment->id,
-        ]);
+        if($payment->status == "approved") {
+
+            $result = $resend->emails->send([
+                'from' => 'Contacto <onboarding@resend.dev>',
+                'to' => ['cnunezcerda@gmail.com'],
+                'subject' => 'Notificación de Compra',
+                'html' => var_dump($payment),
+            ]);
+        }
 
     } catch (Exception $e) {
         error_log($e->getMessage());
