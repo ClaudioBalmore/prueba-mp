@@ -20,7 +20,7 @@ if (isset($datos['type']) && $datos['type'] == 'payment') {
 
         $payment = $paymentClient->get($paymentId);
         echo "<pre>";
-        echo "$payment";
+        echo var_dump($payment);
         echo "</pre>";
 
         $filePath = "pagos.txt";
@@ -49,12 +49,6 @@ http_response_code(200);
 </head>
 <body>
     <h1>Json Correcto!!</h1>
-
-    <?php 
-    echo "<pre>";
-    var_dump($payment);
-    echo "</pre>";
     
-    ?>
 </body>
 </html>
