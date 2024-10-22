@@ -19,6 +19,9 @@ if (isset($datos['type']) && $datos['type'] == 'payment') {
     try {
 
         $payment = $paymentClient->get($paymentId);
+        echo "<pre>";
+        echo "$payment";
+        echo "</pre>";
 
         $filePath = "pagos.txt";
         $file = fopen($filePath, 'a');
