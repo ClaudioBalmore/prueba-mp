@@ -30,7 +30,7 @@ if (isset($datos['type']) && $datos['type'] == 'payment') {
             'from' => 'Contacto <onboarding@resend.dev>',
             'to' => ['cnunezcerda@gmail.com'],
             'subject' => 'Notificación de Compra',
-            'html' => 'compra realizada con exito'
+            'html' => $paymetn['id']
         ]);
 
     } catch (Exception $e) {
