@@ -1,5 +1,6 @@
 <?php
 
+use MercadoPago\Client\Payment\PaymentClient;
 use MercadoPago\MercadoPagoConfig;
 
 require 'vendor/autoload.php';
@@ -10,10 +11,28 @@ $notificacion = file_get_contents("php://input");
 
 $datos = json_decode($notificacion, true);
 
-$filePath = "pagos.txt";
-$file = fopen($filePath, 'a');
-fwrite($file, "NOTIFICACIÓN: " . $datos . PHP_EOL);
-fclose($file);
+if (isset($datos['type']) && $datos['type'] == 'payment') {
+
+    $paymentId = $datos['data']['id'];
+    $paymentClient = new PaymentClient();
+
+    try {
+
+        $payment = $paymentClient->get($paymentId);
+
+        $filePath = "pagos.txt";
+        $file = fopen($filePath, 'a');
+        fwrite($file, "NOTIFICACIÓN: " . json_encode($datos, JSON_PRETTY_PRINT) . PHP_EOL);
+        fwrite($file, "PAGO: " . json_encode($payment, JSON_PRETTY_PRINT) . PHP_EOL);
+        fclose($file);
+
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+    }
+}
+
+
+
 
 http_response_code(200);
 
@@ -26,6 +45,13 @@ http_response_code(200);
     <title>Prueba Notificacion</title>
 </head>
 <body>
-    <h1>Prueba Correcta!!</h1>
+    <h1>Json Correcto!!</h1>
+
+    <?php 
+    echo "<pre>";
+    var_dump($payment);
+    echo "</pre>";
+    
+    ?>
 </body>
 </html>
