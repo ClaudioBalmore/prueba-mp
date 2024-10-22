@@ -38,7 +38,7 @@ if (isset($datos['type']) && $datos['type'] == 'payment') {
                 'from' => 'Contacto <onboarding@resend.dev>',
                 'to' => ['cnunezcerda@gmail.com'],
                 'subject' => 'Notificación de Compra',
-                'html' => $correo,
+                'html' => $correo
             ]);
         }
 
