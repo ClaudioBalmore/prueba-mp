@@ -6,17 +6,21 @@ use MercadoPago\MercadoPagoConfig;
 require 'vendor/autoload.php';
 
 $resend = Resend::client('re_Qc72Wbin_CFgyECUTvXbPLw4NPXfSaVwF');
-// //Formatear fecha
-// $fechaOriginal = $payment->date_approved;
-// $fecha = new DateTime($fechaOriginal);
+//Formatear fecha
+$fechaOriginal = $payment->date_approved;
+$fecha = new DateTime($fechaOriginal);
 
-// $correo = ' Compra realizada con éxito <br>
-// Número de Transacción: '.$payment->id.'<br>
-// Fecha Aprovación: '. $fecha->format('d/m/Y H:i:s') .'
-
-
-
-// ';
+$correo = ' Compra realizada con éxito <br>
+Número de Transacción: '.$payment->id.'<br>
+Fecha Aprovación: '. $fecha->format('d/m/Y H:i:s') .'<br>
+Nombre: '.$payment->additional_info->payer->first_name.'<br>
+Telefono: '.$payment->additional_info->payer->phone->number.'<br>
+Correo: '.$payment->additional_info->payer->email .'<br>
+Dirección: '.$payment->additional_info->payer->address->street_name.'<br><br>
+Detalles de Compra<br>
+Producto: '.$payment->description .' CLP$'.$payment->transaction_amount.'<br>
+Envio: '.$payment->shipping_amount .'<br>
+Total Pagado: CLP$'.$payment->transaction_amount+$payment->shipping_amount;
 
 
 MercadoPagoConfig::setAccessToken("APP_USR-7814564292133896-100119-aa29a73b031435648377a718733848d2-2016921642");
@@ -45,7 +49,7 @@ if (isset($datos['type']) && $datos['type'] == 'payment') {
                 'from' => 'Contacto <onboarding@resend.dev>',
                 'to' => ['cnunezcerda@gmail.com'],
                 'subject' => 'Notificación de Compra',
-                'html' => json_encode($payment, JSON_PRETTY_PRINT),
+                'html' => $correo,
             ]);
         }
 
