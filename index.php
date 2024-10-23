@@ -32,7 +32,8 @@ if (isset($datos['type']) && $datos['type'] == 'payment') {
             $fechaOriginal = $payment->date_approved;
             $fecha = new DateTime($fechaOriginal);
 
-            $correo = 'Compra realizada con éxito <br>Número de Transacción: '.$payment->id.'<br>Fecha Aprovación: '. $fecha->format('d/m/Y H:i:s') .'<br><br>Datos Comprador<br>Nombre: '.$payment->additional_info->payer->first_name.'<br>Telefono: '.$payment->additional_info->payer->phone->number.'<br>Correo: '.$payment->additional_info->payer->email .'<br>Dirección: '.$payment->additional_info->payer->address->street_name.'<br><br>Detalles de Compra<br>Producto: '.$payment->description .' CLP$'.$payment->transaction_amount.'<br>Envio: CLP$'.$payment->shipping_amount .'<br>Total Pagado: CLP$'.$payment->transaction_amount+$payment->shipping_amount.'<br><br>'.json_encode($payment);
+            $correo = 'Compra realizada con éxito<br>Detalles de Compra<br>Número de Transacción: '.$payment->id.'<br>Fecha Aprovación: '. $fecha->format('d/m/Y H:i:s') .'<br>Producto: '.$payment->description .' CLP$'.$payment->transaction_amount.'<br>Envio: CLP$'.$payment->shipping_amount .'<br>Total Pagado: CLP$'.$payment->transaction_details->total_paid_amount.'<br><br>Datos Comprador<br>
+            Nombre: '.$payment->additional_info->payer->first_name.'<br>Telefono: '.$payment->additional_info->payer->phone->number.'<br>Correo: '.$payment->additional_info->payer->email .'<br>Dirección: '.$payment->additional_info->payer->address->street_name;
 
             $result = $resend->emails->send([
                 'from' => 'Contacto <onboarding@resend.dev>',
